@@ -9,7 +9,8 @@
     "lint": "next lint",
     "prisma:generate": "prisma generate --schema=./src/lib/prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=./src/lib/prisma/schema.prisma",
-    "prisma:studio": "prisma studio --schema=./src/lib/prisma/schema.prisma"
+    "prisma:studio": "prisma studio --schema=./src/lib/prisma/schema.prisma",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
