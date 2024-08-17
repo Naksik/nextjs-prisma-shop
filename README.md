@@ -39,3 +39,6 @@ the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=
 from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+How create NextJS project with prisma
+https://vercel.com/guides/nextjs-prisma-postgres
