@@ -9,7 +9,12 @@
     "lint": "next lint",
     "prisma:generate": "prisma generate --schema=./src/lib/prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=./src/lib/prisma/schema.prisma",
-    "prisma:studio": "prisma studio --schema=./src/lib/prisma/schema.prisma"
+    "prisma:push:resetdb": "prisma db push --force-reset --schema=./src/lib/prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema=./src/lib/prisma/schema.prisma",
+    "prisma:seed": "prisma db seed --schema=./src/lib/prisma/schema.prisma"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/lib/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
@@ -18,7 +23,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.16.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
@@ -26,6 +31,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
     "prisma": "^5.18.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

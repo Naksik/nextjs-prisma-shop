@@ -3,26 +3,47 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Product {
-  id        String  @default(cuid()) @id
-  name      String
-  price     String?
-  status    Boolean @default(false)
-  creator   User?   @relation(fields: [creatorId], references: [id])
-  creatorId String?
+  id         String                 @id @default(cuid())
+  name       String
+  price      String?
+  status     Boolean                @default(false)
+  creator    User?                  @relation(fields: [creatorId], references: [id])
+  creatorId  String?
+  categories CategoriesOnProducts[]
 }
 
 model User {
-  id            String    @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  products      Product[]
+  id                 String                 @id @default(cuid())
+  name               String?
+  email              String?                @unique
+  createdAt          DateTime               @default(now()) @map(name: "created_at")
+  updatedAt          DateTime               @updatedAt @map(name: "updated_at")
+  products           Product[]
+  assignedCategories CategoriesOnProducts[]
+
   @@map(name: "users")
+}
+
+model Category {
+  id       String                 @id @default(cuid())
+  name     String
+  products CategoriesOnProducts[]
+}
+
+model CategoriesOnProducts {
+  product      Product  @relation(fields: [productId], references: [id])
+  productId    String
+  category     Category @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  assignedAt   DateTime @default(now())
+  assignedBy   User     @relation(fields: [assignedById], references: [id])
+  assignedById String
+
+  @@id([productId, categoryId, assignedById])
 }
