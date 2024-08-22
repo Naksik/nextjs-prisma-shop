@@ -1,28 +1,37 @@
 import {Prisma} from '@prisma/client'
 import {NextRequest, NextResponse} from 'next/server'
 import {prisma} from '@/lib/prisma/prisma-client'
+import {getRequestHandler} from '@/lib/api/getRequestHandler'
 
 export async function GET() {
-  try {
+  return await getRequestHandler(async () => {
     const products = await prisma.product.findMany()
 
     return NextResponse.json(products)
-  } catch (error) {
-    return NextResponse.json({error: 'Internal Server Error', status: 500}, {status: 500})
-  }
+  })
 }
 
-export interface ProductCreateRequest extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
-    creatorId: string
-    categoryIds?: string[]
+export interface ProductCreateRequest
+  extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
+  creatorId: string
+  categoryIds?: string[]
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const {name, price, status = false, creatorId, categoryIds}: ProductCreateRequest = await request.json()
+    const {
+      name,
+      price,
+      status = false,
+      creatorId,
+      categoryIds,
+    }: ProductCreateRequest = await request.json()
 
     if (!name || !creatorId || !Array.isArray(categoryIds)) {
-      return NextResponse.json({error: 'Missing required fields'}, {status: 400})
+      return NextResponse.json(
+        {error: 'Missing required fields'},
+        {status: 400},
+      )
     }
 
     const product = await prisma.product.create({
@@ -32,7 +41,7 @@ export async function POST(request: NextRequest) {
         status,
         creatorId,
         categories: {
-          create: categoryIds.map((categoryId: string) => ({
+          create: categoryIds.map((categoryId) => ({
             categoryId,
             assignedById: creatorId,
           })),
