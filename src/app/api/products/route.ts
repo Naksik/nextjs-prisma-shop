@@ -2,6 +2,26 @@ import {Prisma} from '@prisma/client'
 import {NextRequest, NextResponse} from 'next/server'
 import {prisma} from '@/lib/prisma/prisma-client'
 import {getRequestHandler} from '@/lib/api/getRequestHandler'
+import {postRequestHandler} from '@/lib/api/postRequestHandler'
+import {z} from 'zod'
+
+export interface RequestProductCreate
+  extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
+  creatorId: string
+  categoryIds?: string[]
+}
+
+export interface RequestProductDelete {
+  id: string
+}
+
+const SCHEMA_PRODUCT_CREATE_REQUEST = z.object({
+  name: z.string().min(1, 'Name is required'),
+  price: z.string(),
+  status: z.boolean(),
+  creatorId: z.string().min(1, 'Creator ID is required'),
+  categoryIds: z.array(z.string()),
+})
 
 export async function GET() {
   return await getRequestHandler(async () => {
@@ -11,46 +31,37 @@ export async function GET() {
   })
 }
 
-export interface ProductCreateRequest
-  extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
-  creatorId: string
-  categoryIds?: string[]
-}
-
 export async function POST(request: NextRequest) {
-  try {
-    const {
-      name,
-      price,
-      status = false,
-      creatorId,
-      categoryIds,
-    }: ProductCreateRequest = await request.json()
+  return await postRequestHandler(async () => {
+    const body: RequestProductCreate = await request.json()
+    const {categoryIds, ...validatedBody} =
+      SCHEMA_PRODUCT_CREATE_REQUEST.parse(body)
 
-    if (!name || !creatorId || !Array.isArray(categoryIds)) {
-      return NextResponse.json(
-        {error: 'Missing required fields'},
-        {status: 400},
-      )
-    }
-
-    const product = await prisma.product.create({
+    const products = await prisma.product.create({
       data: {
-        name,
-        price,
-        status,
-        creatorId,
+        ...validatedBody,
         categories: {
           create: categoryIds.map((categoryId) => ({
             categoryId,
-            assignedById: creatorId,
+            assignedById: validatedBody.creatorId,
           })),
         },
       },
     })
 
-    return NextResponse.json(product, {status: 201})
-  } catch (error) {
-    return NextResponse.json({error: 'Bad Request', status: 400}, {status: 400})
-  }
+    return NextResponse.json(products)
+  })
+}
+
+export async function DELETE(request: NextRequest) {
+  return await postRequestHandler(async () => {
+    const {searchParams} = new URL(request.url)
+    const id = searchParams.get('id') ?? 'N/A'
+
+    await prisma.product.delete({
+      where: {id},
+    })
+
+    return new NextResponse(null, {status: 204})
+  })
 }
