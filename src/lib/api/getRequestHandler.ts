@@ -1,8 +1,8 @@
-import {NextResponse} from 'next/server'
+import {NextRequest, NextResponse} from 'next/server'
 import HttpStatusCode from '@/lib/api/httpStatusCode'
 
 interface Options {
-  request?: Request
+  request?: NextRequest
 }
 
 export async function getRequestHandler<T extends NextResponse>(
@@ -14,9 +14,12 @@ export async function getRequestHandler<T extends NextResponse>(
   } catch (error) {
     console.error(error)
 
-    return NextResponse.json({
-      error: 'Internal Server Error',
-      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
-    })
+    return NextResponse.json(
+      {
+        error: 'Internal Server Error',
+        status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      },
+      {status: HttpStatusCode.INTERNAL_SERVER_ERROR},
+    )
   }
 }
