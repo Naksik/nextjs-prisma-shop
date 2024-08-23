@@ -1,14 +1,15 @@
 import {NextRequest, NextResponse} from 'next/server'
 import HttpStatusCode from '@/lib/api/httpStatusCode'
 import {z} from 'zod'
+import {Prisma} from '@prisma/client'
 
 interface Options {
-  request?: NextRequest
+  request: NextRequest
 }
 
-export async function postRequestHandler<T extends NextResponse>(
+export async function requestHandler<T extends NextResponse>(
   callback: () => Promise<T>,
-  options?: Options,
+  options: Options,
 ) {
   try {
     return await callback()
@@ -20,6 +21,20 @@ export async function postRequestHandler<T extends NextResponse>(
         {errors: error.errors, status: HttpStatusCode.BAD_REQUEST},
         {status: HttpStatusCode.BAD_REQUEST},
       )
+    }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // Error codes: https://www.prisma.io/docs/orm/reference/error-reference
+
+      if (error.code === 'P2025') {
+        return NextResponse.json(
+          {
+            error: error?.meta?.cause ?? 'Not Found',
+            status: HttpStatusCode.NOT_FOUND,
+          },
+          {status: HttpStatusCode.NOT_FOUND},
+        )
+      }
     }
 
     return NextResponse.json(
