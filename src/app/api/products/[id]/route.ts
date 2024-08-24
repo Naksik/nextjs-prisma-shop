@@ -3,26 +3,27 @@ import {prisma} from '@/lib/prisma/prisma-client'
 import {requestHandler} from '@/lib/api/requestHandler'
 import {z} from 'zod'
 import HttpStatusCode from '@/lib/api/httpStatusCode'
+import {ZStringToInteger} from '@/lib/zod/ZStringToInteger'
 
-interface RequestGetProduct {
+interface ParamsGetProduct {
   id: string
 }
 
-interface RequestDeleteProduct {
+interface ParamsDeleteProduct {
   id: string
 }
 
 const SCHEMA_PRODUCT_DELETE_PARAMS = z.object({
-  id: z.string().min(1, 'ID is required'),
+  id: ZStringToInteger(z.string().min(1, 'ID is required')),
 })
 
 const SCHEMA_PRODUCT_GET_PARAMS = z.object({
-  id: z.string().min(1, 'ID is required'),
+  id: ZStringToInteger(z.string().min(1, 'ID is required')),
 })
 
 export async function GET(
   request: NextRequest,
-  {params}: {params: RequestGetProduct},
+  {params}: {params: ParamsGetProduct},
 ) {
   const {id} = SCHEMA_PRODUCT_GET_PARAMS.parse(params)
 
@@ -50,7 +51,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  {params}: {params: RequestDeleteProduct},
+  {params}: {params: ParamsDeleteProduct},
 ) {
   const {id} = SCHEMA_PRODUCT_DELETE_PARAMS.parse(params)
 
