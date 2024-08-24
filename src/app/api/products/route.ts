@@ -5,6 +5,8 @@ import {z} from 'zod'
 import {Prisma} from '@prisma/client'
 import {getSearchParamsFromNextUrl} from '@/lib/api/getSearchParamsFromNextUrl'
 import {createPagination} from '@/lib/api/createPagination'
+import {ZStringToInteger} from '@/lib/zod/ZStringToInteger'
+import HttpStatusCode from '@/lib/api/httpStatusCode'
 
 interface RequestCreateProduct
   extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
@@ -16,8 +18,8 @@ const SCHEMA_PRODUCT_CREATE_REQUEST = z.object({
   name: z.string().min(1, 'Name is required'),
   price: z.string(),
   status: z.boolean(),
-  creatorId: z.string().min(1, 'Creator ID is required'),
-  categoryIds: z.array(z.string()),
+  creatorId: ZStringToInteger(z.string().min(1, 'Creator ID is required')),
+  categoryIds: z.array(ZStringToInteger(z.string())),
 })
 
 interface SearchParamsGetProduct {
@@ -35,8 +37,8 @@ export async function GET(request: NextRequest) {
       const totalProducts = await prisma.product.count()
 
       const {skip, take, totalPages, page, pageSize} = createPagination(
-        parseInt(searchParams.page, 10),
-        parseInt(searchParams.pageSize, 10),
+        searchParams.page,
+        searchParams.pageSize,
         totalProducts,
       )
 
@@ -62,22 +64,23 @@ export async function POST(request: NextRequest) {
     async () => {
       const body: RequestCreateProduct = await request.json()
 
-      const {categoryIds, ...validatedBody} =
+      const {creatorId, categoryIds, ...validatedBody} =
         SCHEMA_PRODUCT_CREATE_REQUEST.parse(body)
 
       const products = await prisma.product.create({
         data: {
           ...validatedBody,
+          creatorId,
           categories: {
             create: categoryIds.map((categoryId) => ({
-              categoryId,
-              assignedById: validatedBody.creatorId,
+              categoryId: categoryId,
+              assignedById: creatorId,
             })),
           },
         },
       })
 
-      return NextResponse.json(products)
+      return NextResponse.json(products, {status: HttpStatusCode.CREATED})
     },
     {request},
   )

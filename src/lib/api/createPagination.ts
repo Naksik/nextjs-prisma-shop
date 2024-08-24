@@ -1,36 +1,31 @@
-interface Pagination {
-  skip: number
-  take: number
-  page?: number
-  pageSize?: number
-  totalPages: number
-}
+const DEFAULT_PAGE = '1'
 
-export const DEFAULT_START_PAGE = 1
-
-export const DEFAULT_PAGE_SIZE = 20
+const DEFAULT_PAGE_SIZE = '20'
 
 export function createPagination(
-  page = DEFAULT_START_PAGE,
+  page = DEFAULT_PAGE,
   pageSize = DEFAULT_PAGE_SIZE,
   totalItems: number,
-): Pagination {
-  if (isNaN(page) || page < 1) {
-    page = DEFAULT_START_PAGE
+) {
+  let pageAsNumber = parseInt(page, 10)
+  let pageSizeAsNumber = parseInt(pageSize, 10)
+
+  if (isNaN(pageAsNumber) || pageAsNumber < 1) {
+    pageAsNumber = Number(DEFAULT_PAGE)
   }
 
-  if (isNaN(pageSize) || pageSize < 1) {
-    pageSize = DEFAULT_PAGE_SIZE
+  if (isNaN(pageSizeAsNumber) || pageSizeAsNumber < 1) {
+    pageSizeAsNumber = Number(DEFAULT_PAGE_SIZE)
   }
 
-  const totalPages = Math.ceil(totalItems / pageSize)
-  const skip = (page - 1) * pageSize
+  const totalPages = Math.ceil(totalItems / pageSizeAsNumber)
+  const skip = (pageAsNumber - 1) * pageSizeAsNumber
 
   return {
     skip,
-    take: pageSize,
-    page,
-    pageSize,
+    take: pageSizeAsNumber,
+    page: pageAsNumber,
+    pageSize: pageSizeAsNumber,
     totalPages,
   }
 }
