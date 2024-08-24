@@ -3,6 +3,8 @@ import {prisma} from '@/lib/prisma/prisma-client'
 import {requestHandler} from '@/lib/api/requestHandler'
 import {z} from 'zod'
 import {Prisma} from '@prisma/client'
+import {getSearchParamsFromNextUrl} from '@/lib/api/getSearchParamsFromNextUrl'
+import {createPagination} from '@/lib/api/createPagination'
 
 interface RequestCreateProduct
   extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {
@@ -18,12 +20,38 @@ const SCHEMA_PRODUCT_CREATE_REQUEST = z.object({
   categoryIds: z.array(z.string()),
 })
 
+interface SearchParamsGetProduct {
+  page: string
+  pageSize: string
+}
+
 export async function GET(request: NextRequest) {
+  const searchParams = getSearchParamsFromNextUrl<SearchParamsGetProduct>(
+    request.nextUrl,
+  )
+
   return await requestHandler(
     async () => {
-      const products = await prisma.product.findMany()
+      const totalProducts = await prisma.product.count()
 
-      return NextResponse.json(products)
+      const {skip, take, totalPages, page, pageSize} = createPagination(
+        parseInt(searchParams.page, 10),
+        parseInt(searchParams.pageSize, 10),
+        totalProducts,
+      )
+
+      const products = await prisma.product.findMany({
+        skip,
+        take,
+      })
+
+      return NextResponse.json({
+        page,
+        pageSize,
+        totalPages,
+        totalProducts,
+        data: products,
+      })
     },
     {request},
   )
