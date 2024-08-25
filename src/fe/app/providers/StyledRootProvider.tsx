@@ -1,14 +1,14 @@
 'use client'
 import {ThemeProvider} from '@mui/material/styles'
-import theme from '@/shared/styles/theme'
+import theme from '@/fe/app/styles/theme'
 import {ReactNode} from 'react'
 import {CssBaseline} from '@mui/material'
 
-interface StyledRootProps {
+interface StyledRootProviderProps {
   children?: ReactNode
 }
 
-export function StyledRoot({children}: StyledRootProps) {
+export function StyledRootProvider({children}: StyledRootProviderProps) {
   return (
     <ThemeProvider theme={theme}>
       <>

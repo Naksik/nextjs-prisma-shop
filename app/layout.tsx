@@ -1,7 +1,7 @@
 import type {Metadata} from 'next'
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v13-appRouter'
 import {ReactNode} from 'react'
-import {StyledRoot} from '@/shared/components/StyledRoot'
+import {StyledRootProvider} from '@/fe/app/providers/StyledRootProvider'
 
 interface RootLayoutProps {
   children?: ReactNode
@@ -22,7 +22,7 @@ export default function RootLayout({children}: RootLayoutProps) {
       </head>
       <body>
         <AppRouterCacheProvider>
-          <StyledRoot>{children}</StyledRoot>
+          <StyledRootProvider>{children}</StyledRootProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

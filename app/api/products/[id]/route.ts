@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {prisma} from '@/lib/prisma/prisma-client'
-import {requestHandler} from '@/lib/api/requestHandler'
+import {prisma} from '@/be/prisma/prisma-client'
+import {requestHandler} from '@/be/api/requestHandler'
 import {z} from 'zod'
-import HttpStatusCode from '@/lib/api/httpStatusCode'
-import {ZStringToInteger} from '@/lib/zod/ZStringToInteger'
+import HttpStatusCode from '@/be/api/httpStatusCode'
+import {ZStringToInteger} from '@/shared/zod/ZStringToInteger'
 
 interface ParamsGetProduct {
   id: string

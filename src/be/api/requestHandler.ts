@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
-import HttpStatusCode from '@/lib/api/httpStatusCode'
+import HttpStatusCode from '@/be/api/httpStatusCode'
 import {z} from 'zod'
 import {Prisma} from '@prisma/client'
 

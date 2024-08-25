@@ -1,12 +1,12 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {prisma} from '@/lib/prisma/prisma-client'
-import {requestHandler} from '@/lib/api/requestHandler'
+import {prisma} from '@/be/prisma/prisma-client'
+import {requestHandler} from '@/be/api/requestHandler'
 import {z} from 'zod'
 import {Prisma} from '@prisma/client'
-import {getSearchParamsFromNextUrl} from '@/lib/api/getSearchParamsFromNextUrl'
-import {createPagination} from '@/lib/api/createPagination'
-import {ZStringToInteger} from '@/lib/zod/ZStringToInteger'
-import HttpStatusCode from '@/lib/api/httpStatusCode'
+import {getSearchParamsFromNextUrl} from '@/be/api/getSearchParamsFromNextUrl'
+import {createPagination} from '@/be/api/createPagination'
+import {ZStringToInteger} from '@/shared/zod/ZStringToInteger'
+import HttpStatusCode from '@/be/api/httpStatusCode'
 
 interface RequestCreateProduct
   extends Omit<Prisma.ProductCreateInput, 'categories' | 'creator'> {

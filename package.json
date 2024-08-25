@@ -8,14 +8,14 @@
     "start": "next start",
     "lint:es": "next lint",
     "lint:ts": "tsc --noEmit",
-    "prisma:generate": "prisma generate --schema=./src/lib/prisma/schema.prisma",
-    "prisma:push": "prisma db push --schema=./src/lib/prisma/schema.prisma",
-    "prisma:push:resetdb": "prisma db push --force-reset --schema=./src/lib/prisma/schema.prisma",
-    "prisma:studio": "prisma studio --schema=./src/lib/prisma/schema.prisma",
-    "prisma:seed": "prisma db seed --schema=./src/lib/prisma/schema.prisma"
+    "prisma:generate": "prisma generate --schema=./src/be/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema=./src/be/prisma/schema.prisma",
+    "prisma:push:resetdb": "prisma db push --force-reset --schema=./src/be/prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema=./src/be/prisma/schema.prisma",
+    "prisma:seed": "prisma db seed --schema=./src/be/prisma/schema.prisma"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/lib/prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/be/prisma/seed.ts"
   },
   "engines": {
     "node": ">=20.16"
