@@ -2,10 +2,12 @@ import type {Metadata} from 'next'
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v13-appRouter'
 import {ReactNode} from 'react'
 import {StyledRootProvider} from '@/fe/app/providers/StyledRootProvider'
+import StoreProvider from '@/fe/app/providers/StoreProvider'
 
 interface RootLayoutProps {
   children?: ReactNode
 }
+
 const DEFAULT_TITLE = 'Simple Food Shop'
 
 export const metadata: Metadata = {
@@ -22,7 +24,9 @@ export default function RootLayout({children}: RootLayoutProps) {
       </head>
       <body>
         <AppRouterCacheProvider>
-          <StyledRootProvider>{children}</StyledRootProvider>
+          <StyledRootProvider>
+            <StoreProvider>{children}</StoreProvider>
+          </StyledRootProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

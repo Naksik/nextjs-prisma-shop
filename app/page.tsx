@@ -1,7 +1,7 @@
-import {Button} from '@mui/material'
+import {CounterPage} from '@/fe/pages/counter/ui/Page'
 
 export default function Home() {
   return (
-    <Button variant="contained">Test MUI</Button>
+    <CounterPage />
   )
 }
