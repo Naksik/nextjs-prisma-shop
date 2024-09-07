@@ -1,9 +1,11 @@
 import {Prisma} from '@prisma/client'
+import {hashSync} from 'bcrypt'
 
 export const users: Prisma.UserCreateInput[] = [
   {
     name: 'John Doe',
-    email: 'john@example.com',
+    email: 'arcanen94@gmail.com',
+    password: hashSync('1233456', 10),
   },
 ]
 
