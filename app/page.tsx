@@ -1,4 +1,4 @@
-import {CounterPage} from '@/fe/pages/counter/ui/Page'
+import {CounterPage} from '@/fe/pages/counter'
 
 export default function Home() {
   return (

@@ -3,6 +3,7 @@ import {AppRouterCacheProvider} from '@mui/material-nextjs/v13-appRouter'
 import {ReactNode} from 'react'
 import {StyledRootProvider} from '@/fe/app/providers/StyledRootProvider'
 import StoreProvider from '@/fe/app/providers/StoreProvider'
+import {SessionProvider} from '@/fe/app/providers/SessionProvider'
 
 interface RootLayoutProps {
   children?: ReactNode
@@ -25,7 +26,9 @@ export default function RootLayout({children}: RootLayoutProps) {
       <body>
         <AppRouterCacheProvider>
           <StyledRootProvider>
-            <StoreProvider>{children}</StoreProvider>
+            <StoreProvider>
+              <SessionProvider>{children}</SessionProvider>
+            </StoreProvider>
           </StyledRootProvider>
         </AppRouterCacheProvider>
       </body>

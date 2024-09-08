@@ -5,7 +5,7 @@ export const users: Prisma.UserCreateInput[] = [
   {
     name: 'John Doe',
     email: 'arcanen94@gmail.com',
-    password: hashSync('1233456', 10),
+    password: hashSync('123456', 10),
   },
 ]
 
