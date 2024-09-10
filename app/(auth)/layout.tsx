@@ -1,6 +1,6 @@
 import {ReactNode} from 'react'
 import {getServerSession} from 'next-auth'
-import {authOptions} from '@/be/constants/auth'
+import {authOptions} from '@/server/constants/authOptions'
 import {redirect} from 'next/navigation'
 
 interface RootLayoutProps {

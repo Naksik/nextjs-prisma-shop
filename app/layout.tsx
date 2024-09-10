@@ -1,9 +1,9 @@
 import type {Metadata} from 'next'
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v13-appRouter'
 import {ReactNode} from 'react'
-import {StyledRootProvider} from '@/fe/app/providers/StyledRootProvider'
-import StoreProvider from '@/fe/app/providers/StoreProvider'
-import {SessionProvider} from '@/fe/app/providers/SessionProvider'
+import {StyledRootProvider} from '@/app/providers/StyledRootProvider'
+import StoreProvider from '@/app/providers/StoreProvider'
+import {SessionProvider} from '@//app/providers/SessionProvider'
 
 interface RootLayoutProps {
   children?: ReactNode

@@ -1,4 +1,4 @@
-import {CounterPage} from '@/fe/pages/counter'
+import {CounterPage} from '@/_pages/counter'
 
 export default function Home() {
   return (
